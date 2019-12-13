@@ -5,6 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20191213100921_AddPhotoPathColumn.cs" />
+    <Compile Remove="Migrations\20191213100921_AddPhotoPathColumn.Designer.cs" />
+    <Compile Remove="Migrations\20191213101149_AddSomeProperty.cs" />
+    <Compile Remove="Migrations\20191213101149_AddSomeProperty.Designer.cs" />
+    <Compile Remove="Migrations\20191213101521_AddPhotoPathColumn.cs" />
+    <Compile Remove="Migrations\20191213101521_AddPhotoPathColumn.Designer.cs" />
+    <Compile Remove="Migrations\20191213101632_AddPhotoPathColumn1.cs" />
+    <Compile Remove="Migrations\20191213101632_AddPhotoPathColumn1.Designer.cs" />
+    <Compile Remove="Migrations\20191213101736_AddSomeProperty.cs" />
+    <Compile Remove="Migrations\20191213101736_AddSomeProperty.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
