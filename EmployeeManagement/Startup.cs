@@ -39,6 +39,10 @@ namespace EmployeeManagement
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+            }
 
             app.UseStaticFiles();
             //app.UseMvcWithDefaultRoute();
@@ -46,6 +50,7 @@ namespace EmployeeManagement
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+            
         }
     }
 }

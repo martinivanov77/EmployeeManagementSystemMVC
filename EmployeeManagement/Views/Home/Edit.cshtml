@@ -1,13 +1,21 @@
-﻿@model EmployeeCreateViewModel
+﻿@model EmployeeEditViewModel
 
 @{
-    ViewBag.Title = "Create Employee";
+    ViewBag.Title = "Edit Employee";
+    // Get the full path of the existing employee photo for display
+    var photoPath = "~/images/" + (Model.ExistingPhotoPath ?? "noimage.jpg");
 }
 
-@*To support file upload set the form element enctype="multipart/form-data" *@
+<form asp-controller="home" asp-action="edit" enctype="multipart/form-data" method="post" class="mt-3">
+    <div asp-validation-summary="All" class="text-danger">
+    </div>
+    @*Use hidden input elements to store employee id and ExistingPhotoPath
+        which we need when we submit the form and update data in the database*@
+    <input hidden asp-for="Id" />
+    <input hidden asp-for="ExistingPhotoPath" />
 
-<form enctype="multipart/form-data" asp-controller="home" asp-action="create"
-      method="post" class="mt-3">
+    @*Bind to the properties of the EmployeeEditViewModel. The asp-for tag helper
+        takes care of displaying the existing data in the respective input elements*@
     <div class="form-group row">
         <label asp-for="Name" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
@@ -34,42 +42,34 @@
         </div>
     </div>
 
-    @*  asp-for tag helper is set to "Photo" property. "Photo" property type is IFormFile
-        so at runtime asp.net core generates file upload control (input type=file)
-    *@
-
     <div class="form-group row">
         <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <div class="custom-file">
-                <input multiple asp-for="Photo" class="form-control custom-file-input">
-                <label class="custom-file-label">Choose File...</label>
+                <input asp-for="Photo" class="custom-file-input form-control">
+                <label class="custom-file-label">Click here to change photo</label>
             </div>
         </div>
     </div>
 
-    <div asp-validation-summary="All" class="text-danger"></div>
+    @*Display the existing employee photo*@
+    <div class="form-group row col-sm-4 offset-4">
+        <img class="imageThumbnail" src="@photoPath" asp-append-version="true" />
+    </div>
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="index" asp-controller="home" class="btn btn-primary">Cancel</a>
         </div>
     </div>
-
-    @*This script is required to display the selected file in the file upload element*@
 
     @section Scripts {
         <script>
             $(document).ready(function () {
                 $('.custom-file-input').on("change", function () {
-                    var fileLabel = $(this).next('.custom-file-label');
-                    var files = $(this)[0].files;
-                    if (files.length > 1) {
-                        fileLabel.html(files.length + ' files selected');
-                    }
-                    else if (files.length == 1) {
-                        fileLabel.html(files[0].name);
-                    }
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
                 });
             });
         </script>
