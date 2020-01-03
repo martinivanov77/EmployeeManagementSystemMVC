@@ -1,5 +1,6 @@
 ﻿using EmployeeManagement.Models;
 using EmployeeManagement.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IEmployeeRepository employeeRepository;
@@ -26,17 +28,14 @@ namespace EmployeeManagement.Controllers
             this.logger = logger;
         }
 
+        [AllowAnonymous]
         public ViewResult Index()
         {
             var model = this.employeeRepository.GetAllEmployees();
             return View(model);
         }
 
-        public ViewResult Create()
-        {
-            return View();
-        }
-
+        [AllowAnonymous]
         public ViewResult Details(int? id)
         {
             logger.LogTrace("Trace Log");
@@ -48,7 +47,7 @@ namespace EmployeeManagement.Controllers
 
             Employee employee = this.employeeRepository.GetEmployee(id.Value);
 
-            if(employee == null)
+            if (employee == null)
             {
                 Response.StatusCode = 404;
                 return View("EmployeeNotFound", id);
@@ -63,6 +62,14 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        public ViewResult Create()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Authorize]
         public ViewResult Edit(int id)
         {
             Employee employee = this.employeeRepository.GetEmployee(id);
@@ -79,6 +86,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Edit(EmployeeEditViewModel model)
         {
             if (ModelState.IsValid)
@@ -87,11 +95,11 @@ namespace EmployeeManagement.Controllers
                 employee.Name = model.Name;
                 employee.Email = model.Email;
                 employee.Department = model.Department;
-                
 
-                if(model.Photo != null)
+
+                if (model.Photo != null)
                 {
-                    if(model.ExistingPhotoPath != null)
+                    if (model.ExistingPhotoPath != null)
                     {
                         string filePath = Path.Combine(hostingEnvironment.WebRootPath, "images", model.ExistingPhotoPath);
                         System.IO.File.Delete(filePath);
@@ -107,6 +115,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(EmployeeCreateViewModel model)
         {
             if (ModelState.IsValid)
